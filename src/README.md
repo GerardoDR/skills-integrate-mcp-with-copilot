@@ -5,14 +5,23 @@ A super simple FastAPI application that allows students to view and sign up for 
 ## Features
 
 - View all available extracurricular activities
-- Sign up for activities
+- Sign up for activities with a student account
+- Staff and administrators can view participant rosters
+- Administrators can create student and staff accounts
+- Public activity listings show participant counts, not email addresses
+
+Accounts use SQLite and passwords are stored as scrypt hashes. Students and staff
+accounts are provisioned by an administrator. Configure `ADMIN_EMAIL`,
+`ADMIN_PASSWORD` (at least 12 characters), and a stable `SESSION_SECRET` before
+starting the app. Set `COOKIE_SECURE=true` when serving over HTTPS. The initial
+administrator is created on first startup when those credentials are supplied.
 
 ## Getting Started
 
 1. Install the dependencies:
 
    ```
-   pip install fastapi uvicorn
+   pip install -r requirements.txt
    ```
 
 2. Run the application:
@@ -29,8 +38,13 @@ A super simple FastAPI application that allows students to view and sign up for 
 
 | Method | Endpoint                                                          | Description                                                         |
 | ------ | ----------------------------------------------------------------- | ------------------------------------------------------------------- |
-| GET    | `/activities`                                                     | Get all activities with their details and current participant count |
-| POST   | `/activities/{activity_name}/signup?email=student@mergington.edu` | Sign up for an activity                                             |
+| GET    | `/activities`                                                     | List activities; participant emails are visible only to staff      |
+| POST   | `/auth/login`                                                      | Sign in and start a role-based session                               |
+| POST   | `/auth/logout`                                                     | End the current session                                              |
+| GET    | `/auth/me`                                                         | Get the current account and role                                     |
+| POST   | `/admin/accounts`                                                  | Create a student or staff account (admin only)                       |
+| POST   | `/activities/{activity_name}/signup`                               | Sign up the authenticated student                                   |
+| DELETE | `/activities/{activity_name}/unregister`                           | Cancel your signup; staff may supply a participant email             |
 
 ## Data Model
 
@@ -47,4 +61,5 @@ The application uses a simple data model with meaningful identifiers:
    - Name
    - Grade level
 
-All data is stored in memory, which means data will be reset when the server restarts.
+Activity data is still stored in memory and resets when the server restarts.
+Account data is stored in `src/accounts.sqlite`.

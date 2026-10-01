@@ -81,6 +81,26 @@ section h3 {
   border-top: 1px dashed #ccc;
 }
 
+.registered-status {
+  color: #2e7d32;
+  font-weight: bold;
+}
+
+#account-status {
+  margin-bottom: 12px;
+  font-weight: bold;
+}
+
+#account-create-form {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #ddd;
+}
+
+#account-create-form h4 {
+  margin-bottom: 12px;
+}
+
 .participants-section h5 {
   margin-bottom: 8px;
   color: #1a237e;
@@ -123,6 +143,11 @@ section h3 {
 
 .delete-btn:hover {
   background-color: #ffebee;
+}
+
+.delete-btn {
+  color: #c62828;
+  padding: 4px 8px;
 }
 
 .participants-section p {
